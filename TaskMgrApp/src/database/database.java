@@ -27,20 +27,20 @@ public class database {
                 String[] parts = line.split(" ");
                 if (parts.length == 4) {
                     String staffName = parts[0];
-                    String userName = parts[1];
+                    String staffID = parts[1];
                     String password = parts[2];
                     String title = parts[3];
                     // Process the staffName, userName, and password as needed
                     User user;
                     switch (title) {
                         case "Junior":
-                            user = new Junior(staffName, userName, password, title);
+                            user = new Junior(staffName, staffID, password, title);
                             break;
                         case "Senior":
-                            user = new Senior(staffName, userName, password, title);
+                            user = new Senior(staffName, staffID, password, title);
                             break;
                         case "Manager":
-                            user = new Manager(staffName, userName, password, title);
+                            user = new Manager(staffName, staffID, password, title);
                             break;
                         default:
                             System.err.println("Invalid title: " + title);

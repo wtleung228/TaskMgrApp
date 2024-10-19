@@ -1,5 +1,8 @@
 package user;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Scanner;
 import database.database;
 import task.Task;
@@ -10,11 +13,9 @@ public abstract class User {
 	private String pwd;
 	private String title;
 	private ArrayList<Task> assignedTask = new ArrayList<Task>();
-	private static int ID = 1;
 	
-	public User(String staffName, String username, String pwd, String title) {
-		this.staffID = staffName + ID;
-		ID += 1;
+	public User(String staffName, String staffID, String pwd, String title) {
+		this.staffID = staffID;
 		this.staffName = staffName;
 		this.pwd = pwd;
 		this.title = title;
@@ -43,6 +44,76 @@ public abstract class User {
 	public ArrayList<Task> getTasks() {
 		return assignedTask;
 	}
+	
+	public void addTask(Scanner scanner) {
+        System.out.println("Please input the following information:");
+        System.out.print("Task name: ");
+        String taskName = scanner.nextLine();
+        System.out.print("Task due date: ");
+        Date taskDueDate = readDateFromUser(scanner);
+        Task task = new Task(taskName, taskDueDate);
+		assignedTask.add(task);
+	}
+	
+	public void listAllTasks() {
+		for (Task task : assignedTask) {
+			task.showInfo();
+		}
+	}
+	
+	public void listAllTasksByDate(Date date) {
+		for (Task task : assignedTask) {
+			if (task.getTargetDate().equals(date)) {
+				task.showInfo();
+			}
+		}
+	}
+	
+    private static Date readDateFromUser(Scanner scanner) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        dateFormat.setLenient(false);
+        Date date = null;
+        while (date == null) {
+            System.out.print("Please input the date (yyyy-MM-dd): ");
+            String dateString = scanner.next();
+            try {
+                date = dateFormat.parse(dateString);
+            } catch (ParseException e) {
+                System.out.println("Invalid date format. Please try again.");
+            }
+        }
+        return date;
+    }
+	
+
+    public void operate(Scanner scanner) {
+	    while (true) {
+	        System.out.println("Please select the following options:");
+	        System.out.println("0. Exit");
+	        System.out.println("1. Add a task");
+	        System.out.println("2. List all tasks");
+	        System.out.println("3. List all tasks by date");
+	        int option = scanner.nextInt();
+	        scanner.nextLine(); // Consume newline left-over
+	        switch (option) {
+	            case 1:
+	                this.addTask(scanner);
+	                break;
+	            case 2:
+	                this.listAllTasks();
+	                break;
+	            case 3:
+	                Date date = readDateFromUser(scanner);
+	                this.listAllTasksByDate(date);
+	                break;
+	            case 0:
+	                return;
+	            default:
+	                System.out.println("Invalid option");
+	        }
+	    }
+	}
+
 	
 	public Task selectTask() {
 		final int ITEMS_PER_PAGE = 10;

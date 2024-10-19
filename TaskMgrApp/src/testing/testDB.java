@@ -17,7 +17,7 @@ class testDB {
 		app.App();
 	}
 	
-	@test
+	@Test
 	void test3() {
 		TaskMgrApp app = new TaskMgrApp();
 		app.App();
