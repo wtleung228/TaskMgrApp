@@ -100,7 +100,7 @@ public abstract class User {
 	                this.addTask(scanner);
 	                break;
 	            case 2:
-	                this.listAllTasks();
+	                Task selectedTask = this.selectTask(scanner);
 	                break;
 	            case 3:
 	                Date date = readDateFromUser(scanner);
@@ -115,59 +115,47 @@ public abstract class User {
 	}
 
 	
-	public Task selectTask() {
+	public Task selectTask(Scanner scanner) {
 		final int ITEMS_PER_PAGE = 10;
 		int currentPage = 1;
         int arrayLength = assignedTask.size();
         int maxPage = assignedTask.size() / 10;
-
-        Scanner scanner = new Scanner(System.in);
 
         while (true) {
             int startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
             int endIndex = Math.min(currentPage * ITEMS_PER_PAGE, arrayLength);
 
             for (int i = startIndex; i < endIndex; i++) {
-                System.out.println("Item " + (i + 1) + ": " + assignedTask.get(i));
+                assignedTask.get(i).showInfo();
             }
 
             if (endIndex >= arrayLength) {
                 System.out.println("End of items.");
-                break;
             }
 
             System.out.print("Enter '>' to view the next page: ");
+            System.out.println("");
             System.out.print("Enter '<' to view the last page: ");
             String input = scanner.nextLine();
 
             int choice = Integer.parseInt(input);
 
             if (choice >= 1 && choice <= Math.min(ITEMS_PER_PAGE, assignedTask.size() - startIndex)) {
-            	scanner.close();
                 return assignedTask.get(startIndex + choice - 1);
             } else if (input.equals(">") && currentPage != maxPage) {
                 currentPage++;
             } else if (input.equals("<") && currentPage != 1) {
             	currentPage--;
             } else if (input.equals("0")) {
-            	scanner.close();
             	return null;
             } else {
                     System.out.println("Invalid item number. Please choose a valid item.");
             }
         }
-        scanner.close();
-		return null;
 	}
 	
 	public void displayInfo() {
 		System.out.println("StaffID: " + this.staffID + " " + "staffName: " + staffName + " " + title);
-	}
-	
-	public void viewTasks() {
-		for (Task task: assignedTask) {
-			System.out.println(task.getTargetDate() + " " + task.getTitle());
-		}
 	}
 	
 	public static User Login(String staffID, String pwd) {

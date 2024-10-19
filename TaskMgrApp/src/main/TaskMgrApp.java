@@ -27,9 +27,16 @@ public class TaskMgrApp {
 	}
 	
 	public void App() {
-		Scanner scanner = new Scanner(System.in);
-		User user = Login(scanner);
-		user.operate(scanner);
+		while (true) {			
+			Scanner scanner = new Scanner(System.in);
+			User user = Login(scanner);
+			user.operate(scanner);
+			System.out.println("Do you want to continue? (Y/N)");
+			String choice = scanner.next();
+			if (choice.equals("N")) {
+				break;
+			}
+		}
 		System.out.println("Thanks for using the application");
 	}
 

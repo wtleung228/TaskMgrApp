@@ -1,5 +1,7 @@
 package user;
 
+import java.util.Scanner;
+
 public interface userAction {
-	public void action();
+	public void action(Scanner scanner);
 }

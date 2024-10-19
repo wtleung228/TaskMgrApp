@@ -14,29 +14,19 @@ public class Manager extends User implements userAction{
 		super(staffName, username, pwd, title);
 	}
 	
-	public void action() {
-		Scanner scanner = new Scanner(System.in);
+	public void action(Scanner scanner) {
 		do {
-			System.out.println("Please input 1 to view all tasks");
-			System.out.println("Please input 2 to register new Staff");
-			System.out.println("Please input 3 to create new task");
 			System.out.println("Please input 4 to delete task");
 			System.out.println("Please input 5 to assign Staff to a task");
 			int choice = scanner.nextInt();
 			switch (choice) {
-				case 1:
-					this.viewTasks();
-					break;
-				case 2:
-					database db = database.getInstance();
-					assignedStaff.add(db.query(getID()));
 				case 3:
 					this.createTask();
 				case 4:
-					Task task = this.selectTask();
+					Task task = this.selectTask(scanner);
 					this.deleteTask(task);
 				case 5:
-					this.assignStaffToTask(this.findUser(), this.selectTask());
+					this.assignStaffToTask(this.findUser(scanner), this.selectTask(scanner));
 			}
 		} while (true);
 	}
@@ -45,12 +35,11 @@ public class Manager extends User implements userAction{
 		assignedStaff.add(newStaff);
 	}
 	
-	public User findUser() {
+	public User findUser(Scanner scanner) {
 		System.out.println("Please choose a Staff: ");
 		for (User staff: assignedStaff) {
 			staff.displayInfo();
 		}
-		Scanner scanner = new Scanner(System.in);
 		return assignedStaff.get(scanner.nextInt());
 	}
 	
