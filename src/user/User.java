@@ -50,27 +50,50 @@ public abstract class User {
 	}
 	
 	public void addTask(Scanner scanner) {
-        System.out.println("Please input the following information:");
-        System.out.print("Task name: ");
-        String taskName = scanner.nextLine();
-        System.out.print("Task due date: ");
-        Date taskDueDate = readDateFromUser(scanner);
-        Task task = new Task(taskName, taskDueDate);
-		assignedTask.add(task);
+	    System.out.println("Please input the following information:");
+	    String taskName = null;
+	    while (taskName == null || taskName.trim().isEmpty() || checkDuplicatedTaskName(taskName)) {
+	        System.out.print("Task name: ");
+	        taskName = scanner.nextLine();
+	        if (taskName.trim().isEmpty()) {
+	            System.out.println("Task name cannot be empty. Please enter a valid task name.");
+	        } else if (checkDuplicatedTaskName(taskName)) {
+	            System.out.println("Task name already exists. Please enter a different task name.");
+	        }
+	    }
+	    System.out.print("Task due date: ");
+	    Date taskDueDate = readDateFromUser(scanner);
+	    Task task = new Task(taskName, taskDueDate);
+	    assignedTask.add(task);
+	}
+
+	private boolean checkDuplicatedTaskName(String taskName) {
+	    for (Task task : assignedTask) {
+	        if (task.getTitle().equalsIgnoreCase(taskName)) {
+	            return true;
+	        }
+	    }
+	    return false;
 	}
 	
 	public void listAllTasks() {
 		for (Task task : assignedTask) {
 			task.showInfo();
 		}
+		
 	}
 	
 	public void listAllTasksByDate(Date date) {
-		for (Task task : assignedTask) {
-			if (task.getTargetDate().equals(date)) {
-				task.showInfo();
-			}
-		}
+	    boolean taskFound = false;
+	    for (Task task : assignedTask) {
+	        if (task.getTargetDate().equals(date)) {
+	            task.showInfo();
+	            taskFound = true;
+	        }
+	    }
+	    if (!taskFound) {
+	        System.out.println("You have no task in " + dateFormat.format(date) + " .");
+	    }
 	}
 	
     private static Date readDateFromUser(Scanner scanner) {
@@ -114,7 +137,7 @@ public abstract class User {
                     this.addTask(scanner);
                     break;
                 case 2:
-                    this.listAllTasks();
+                	Task selectedTask = this.selectTask(scanner);
                     break;
                 case 3:
                     Date date = readDateFromUser(scanner);
@@ -132,44 +155,68 @@ public abstract class User {
     }
 
 	
-	public Task selectTask(Scanner scanner) {
-		final int ITEMS_PER_PAGE = 10;
-		int currentPage = 1;
+    public Task selectTask(Scanner scanner) {
+        final int ITEMS_PER_PAGE = 10;
+        int currentPage = 1;
         int arrayLength = assignedTask.size();
-        int maxPage = assignedTask.size() / 10;
+        int maxPage = (int) Math.ceil((double) arrayLength / ITEMS_PER_PAGE);
 
-        while (true) {
-            int startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-            int endIndex = Math.min(currentPage * ITEMS_PER_PAGE, arrayLength);
+        if (assignedTask.isEmpty()) {
+            System.out.println("You have no task.");
+            return null;
+        } else {
+            while (true) {
+                int startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+                int endIndex = Math.min(currentPage * ITEMS_PER_PAGE, arrayLength);
 
-            for (int i = startIndex; i < endIndex; i++) {
-                assignedTask.get(i).showInfo();
-            }
+                for (int i = startIndex; i < endIndex; i++) {
+                    System.out.print((i + 1) + ". ");
+                    assignedTask.get(i).showInfo();
+                }
 
-            if (endIndex >= arrayLength) {
-                System.out.println("End of items.");
-            }
+                if (endIndex >= arrayLength) {
+                    System.out.println("End of items.");
+                }
 
-            System.out.print("Enter '>' to view the next page: ");
-            System.out.println("");
-            System.out.print("Enter '<' to view the last page: ");
-            String input = scanner.nextLine();
+                System.out.println("Enter '>' to view the next page");
+                System.out.println("Enter '<' to view the previous page");
+                System.out.println("Enter '0' to exit");
+                String input = scanner.nextLine().trim();
 
-            int choice = Integer.parseInt(input);
+                if (input.isEmpty()) {
+                    System.out.println("Please enter a valid option.");
+                    continue;
+                }
 
-            if (choice >= 1 && choice <= Math.min(ITEMS_PER_PAGE, assignedTask.size() - startIndex)) {
-                return assignedTask.get(startIndex + choice - 1);
-            } else if (input.equals(">") && currentPage != maxPage) {
-                currentPage++;
-            } else if (input.equals("<") && currentPage != 1) {
-            	currentPage--;
-            } else if (input.equals("0")) {
-            	return null;
-            } else {
-                    System.out.println("Invalid item number. Please choose a valid item.");
+                if (input.equals(">")) {
+                    if (currentPage < maxPage) {
+                        currentPage++;
+                    } else {
+                        System.out.println("You are already on the last page.");
+                    }
+                } else if (input.equals("<")) {
+                    if (currentPage > 1) {
+                        currentPage--;
+                    } else {
+                        System.out.println("You are already on the first page.");
+                    }
+                } else if(input.equals("0")){
+                	return null;
+            	}else {
+                    try {							
+                        int choice = Integer.parseInt(input);	//not sure what this part does, when there are 1 item, input 1 will go back to menu, also 2 items, input 1 or 2 will go back to menu...etc. But enter 11,12 etc.. will show invalid number.
+                        if (choice >= 1 && choice <= Math.min(ITEMS_PER_PAGE, arrayLength - startIndex)) {
+                            return assignedTask.get(startIndex + choice - 1);
+                        } else {
+                            System.out.println("Invalid item number. Please choose a valid item.");
+                        }
+                    } catch (NumberFormatException e) {
+                        System.out.println("Invalid input. Please enter a number, '>' or '<'.");
+                    }
+                }
             }
         }
-	}
+    }
 	
 	public void displayInfo() {
 		System.out.println("StaffID: " + this.staffID + " " + "staffName: " + staffName + " " + title);
