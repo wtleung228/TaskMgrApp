@@ -54,7 +54,7 @@ public class Task {
             return -1;
         }
         int completedItems = 0;
-        for (TaskIte m item : taskItems) {
+        for (TaskItem item : taskItems) {
             if (item.getStatus()) { // Assuming TaskItem has an isCompleted() method
                 completedItems++;
             }
