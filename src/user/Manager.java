@@ -2,8 +2,6 @@ package user;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Scanner;
-import database.database;
-import user.userAction;
 import task.Task;
 
 public class Manager extends User implements userAction{
@@ -44,7 +42,7 @@ public class Manager extends User implements userAction{
 	}
 	
 	public void createTask() {
-		Task newTask = new Task("test", new Date());
+		Task newTask = new Task("test", new Date(), this);
 		newTask.getStaff().add(this);
 		this.getTasks().add(newTask);
 	}

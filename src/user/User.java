@@ -63,7 +63,7 @@ public abstract class User {
 	    }
 	    System.out.print("Task due date: ");
 	    Date taskDueDate = readDateFromUser(scanner);
-	    Task task = new Task(taskName, taskDueDate);
+	    Task task = new Task(taskName, taskDueDate, this);
 	    assignedTask.add(task);
 	}
 
@@ -202,18 +202,7 @@ public abstract class User {
                     }
                 } else if(input.equals("0")){
                 	return null;
-            	}else {
-                    try {							
-                        int choice = Integer.parseInt(input);	//not sure what this part does, when there are 1 item, input 1 will go back to menu, also 2 items, input 1 or 2 will go back to menu...etc. But enter 11,12 etc.. will show invalid number.
-                        if (choice >= 1 && choice <= Math.min(ITEMS_PER_PAGE, arrayLength - startIndex)) {
-                            return assignedTask.get(startIndex + choice - 1);
-                        } else {
-                            System.out.println("Invalid item number. Please choose a valid item.");
-                        }
-                    } catch (NumberFormatException e) {
-                        System.out.println("Invalid input. Please enter a number, '>' or '<'.");
-                    }
-                }
+            	}
             }
         }
     }

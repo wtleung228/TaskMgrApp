@@ -10,13 +10,15 @@ public class Task {
 	 private ArrayList<User> assignedStaff;
 	 private Date targetDate;
 	 private ArrayList<TaskItem> taskItems;
+	 private User creator;
 	 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");	//format date
 	 
-	 public Task(String title, Date targetDate) {
+	 public Task(String title, Date targetDate, User creator) {
 	     this.title = title;
 	     this.targetDate = targetDate;
 	     this.assignedStaff = new ArrayList<>();
 	     this.taskItems = new ArrayList<>();
+	     this.creator = creator;
 	 }
 	
 	public void setDate(Date date) {
@@ -38,12 +40,13 @@ public class Task {
 	public void showInfo() {
         int progress = calculateProgress();
         if (progress == -1) {
-            System.out.println(dateFormat.format(targetDate) +" "+ title +" [Progress: Empty]");
+            System.out.println(dateFormat.format(targetDate) +" "+ title + " " + "created by" + " " + this.creator.getName() + " [Progress: Empty]");
 		} else if(progress == 100){
-			System.out.println(dateFormat.format(targetDate) + " " + title + " [Progress: Done]");
+			System.out.println(dateFormat.format(targetDate) + " " + title + " " + "created by" + " " + this.creator.getName() + " [Progress: Done]");
         } else {
-			System.out.println(dateFormat.format(targetDate) + " " + title + " [Progress: " + progress + "%]");
+			System.out.println(dateFormat.format(targetDate) + " " + title + " "+ "created by" + " " + this.creator.getName() + " [Progress: " + progress + "%]");
 		}
+     
     }
 	
 	public int calculateProgress() {
@@ -51,7 +54,7 @@ public class Task {
             return -1;
         }
         int completedItems = 0;
-        for (TaskItem item : taskItems) {
+        for (TaskIte m item : taskItems) {
             if (item.getStatus()) { // Assuming TaskItem has an isCompleted() method
                 completedItems++;
             }

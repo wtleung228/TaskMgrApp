@@ -1,11 +1,7 @@
 package main;
-import java.util.Date;
 
 import java.util.Scanner;
-import task.Task;
 import user.User;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 
 public class TaskMgrApp {
 	
