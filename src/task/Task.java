@@ -46,7 +46,7 @@ public class Task {
         } else {
 			System.out.println(dateFormat.format(targetDate) + " " + title + " "+ "created by" + " " + this.creator.getName() + " [Progress: " + progress + "%]");
 		}
-     
+      
     }
 	
 	public int calculateProgress() {
@@ -95,6 +95,4 @@ public class Task {
             System.out.println("Invalid index.");
         }
     }
-
-    
 }
