@@ -8,6 +8,12 @@ public class TaskItem {
 		this.content = content;
 	}
 	
+	
+	public TaskItem(String content, boolean status) {
+		this.content = content;
+		this.status = status;
+	}
+	
 	public void setStatus(boolean status) {
 		this.status = status;
 	}

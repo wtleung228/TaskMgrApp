@@ -16,7 +16,7 @@ public class database {
     	readFile(fileName);
     	//
     }
-    
+     
     private void readFile(String fileName) {
         try {
             File file = new File(fileName);
@@ -67,7 +67,11 @@ public class database {
         return instance;
     }
     
-    
+	public void displayAllUsers() {
+		for (User user : userDatabase) {
+			user.displayInfo();
+		}
+	}
     
     // Other database-related methods can be added here
     public User query(String staffID) {

@@ -1,11 +1,7 @@
 package main;
-import java.util.Date;
 
 import java.util.Scanner;
-import task.Task;
 import user.User;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 
 public class TaskMgrApp {
 	
@@ -39,10 +35,12 @@ public class TaskMgrApp {
 		}
 		System.out.println("Thanks for using the application.");
 	}
-
+ 
 	public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		TaskMgrApp app = new TaskMgrApp();
 		app.App();
 	}
+	
+	
 }
