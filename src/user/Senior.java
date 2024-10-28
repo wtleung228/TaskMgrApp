@@ -57,6 +57,7 @@ public class Senior extends User{
                     break;
                 case 5:
 					assignedTask.removeTask(scanner,this);
+					break;
                 case 6:
 
                      try {
@@ -99,6 +100,7 @@ public class Senior extends User{
 	
 	public void assignTaskToUser(User user, Task task) {
 	    user.getTaskManager().addTask(task);
+	    task.addAssignedStaff(user);
 	    System.out.println("Task " + task.getTitle() + " assigned to " + user.getName() + ".");
 	}
 	

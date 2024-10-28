@@ -29,8 +29,9 @@ public class TaskManager {
 	        if (selectedTask != null) {
 	        	PermissionException.poCheck(user,selectedTask.getCreator());
 	        	for (User staff : selectedTask.getStaff()) {
-	                staff.getTaskManager().removeTaskByName(taskName);
+	                staff.getTaskManager().tasks.remove(selectedTask);
 	            }
+	        	
 				tasks.remove(selectedTask);
 				System.out.println("Task removed successfully.");
 	        } else {
@@ -42,12 +43,7 @@ public class TaskManager {
     	
     }
     
-    public void removeTaskByName(String taskName) {
-        Task taskToRemove = this.findTaskByName(taskName);
 
-        tasks.remove(taskToRemove);
-        
-    }
 
     public List<Task> getTasks() {
         return tasks;

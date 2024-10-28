@@ -3,6 +3,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.InputMismatchException;
+import java.util.List;
 import java.util.Scanner;
 import database.database;
 import task.Task;
@@ -58,7 +59,6 @@ public abstract class User {
         return this.title;
     }
 
-    
 
     public TaskManager getTaskManager() {
         return assignedTask;
