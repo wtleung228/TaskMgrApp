@@ -2,6 +2,11 @@ package database;
 import java.util.ArrayList;
 import java.io.File;
 import java.util.Scanner;
+
+import role.JuniorRole;
+import role.ManagerRole;
+import role.SeniorRole;
+
 import java.io.FileNotFoundException;
 import user.*;
 
@@ -31,16 +36,16 @@ public class database {
                     String password = parts[2];
                     String title = parts[3];
                     // Process the staffName, userName, and password as needed
-                    User user;
+                    User user = null; // Initialize to null
                     switch (title) {
                         case "Junior":
-                            user = new Junior(staffName, staffID, password, title);
+                            user = new User(staffName, staffID, password, title, new JuniorRole()); //added new JuniorStrategy()
                             break;
                         case "Senior":
-                            user = new Senior(staffName, staffID, password, title);
+                            user = new User(staffName, staffID, password, title, new SeniorRole()); //added new SeniorStrategy()
                             break;
                         case "Manager":
-                            user = new Manager(staffName, staffID, password, title);
+                        	user = new User(staffName, staffID, password, title, new ManagerRole()); //added new ManagerStrategy()
                             break;
                         default:
                             System.err.println("Invalid title: " + title);

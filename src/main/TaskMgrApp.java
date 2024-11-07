@@ -29,7 +29,7 @@ public class TaskMgrApp {
 			user.operate(scanner);
 			System.out.println("Do you want to continue? (Y/N)");
 			String choice = scanner.next();
-			if (choice.equals("N")) {
+			if (choice.equals("N") || choice.equals("n")) {
 				break;
 			}
 		}

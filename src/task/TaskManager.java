@@ -205,7 +205,17 @@ public class TaskManager {
         return null;
     }
     
-	
+	public boolean checkDuplicatedTaskName(String taskName) {
+		if (tasks.isEmpty()) {
+			return false;
+		}
+	    for (Task task : tasks) {
+	        if (task.getTitle().equalsIgnoreCase(taskName)) {
+	            return true;
+	        }
+	    }
+	    return false;
+	}
 	
 	public void listAllTasks() {
 		for (Task task : tasks) {

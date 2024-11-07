@@ -83,7 +83,6 @@ public class Task {
 	public void addAssignedStaff(User staff) {
 		assignedStaff.add(staff);
 	}
-	
 
     public void removeTodoItem(int index) {
     	index=index-1;
