@@ -6,6 +6,7 @@ import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 import database.database;
+import exception.duplicationException;
 import task.Task;
 import task.TaskManager;
 
@@ -71,17 +72,19 @@ public abstract class User {
     public void addTask(Scanner scanner) {
         System.out.println("Please input the following information:");
         String taskName = null;
-        while (taskName == null || taskName.trim().isEmpty() || !assignedTask.checkDuplicatedTaskName(taskName)) {
+        while (taskName == null || taskName.trim().isEmpty()) {
             System.out.print("Task name: ");
             taskName = scanner.nextLine();
             if (taskName.trim().isEmpty()) {
                 System.out.println("Task name cannot be empty. Please enter a valid task name.");
                 continue;
-            } else if (assignedTask.checkDuplicatedTaskName(taskName)) {
-                System.out.println("Task name already exists. Please enter a different task name.");
-                continue;
             }
-            break;
+            try {
+                duplicationException.checkDuplicatedTaskName(taskName, assignedTask.getTasks());
+            } catch (duplicationException e) {
+                System.out.println(e.getMessage());
+                taskName = null; // Reset taskName to prompt user again
+            }
         }
         System.out.print("Task due date: ");
         Date taskDueDate = readDateFromUser(scanner);
@@ -94,7 +97,7 @@ public abstract class User {
         dateFormat.setLenient(false);
         Date date = null;
         while (date == null) {
-            System.out.print("Please input the date (yyyy-MM-dd): ");
+            System.out.print("Please input the date (yyyy-MM-dd) ");
             String dateString = scanner.next();
             try {
                 date = dateFormat.parse(dateString);
