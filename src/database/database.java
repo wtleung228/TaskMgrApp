@@ -21,8 +21,8 @@ public class database {
     	readFile(fileName);
     	//
     }
-     
-    private void readFile(String fileName) {
+   
+    protected void readFile(String fileName) {
         try {
             File file = new File(fileName);
             Scanner scanner = new Scanner(file);
@@ -48,20 +48,16 @@ public class database {
                         	user = new User(staffName, staffID, password, title, new ManagerRole()); //added new ManagerStrategy()
                             break;
                         default:
-                            System.err.println("Invalid title: " + title);
-                            continue;
+//                            System.err.println("Invalid title: " + title);
                     }
                     userDatabase.add(user);
                 } else {
-                    System.err.println("Invalid format in line: " + line);
+//                    System.err.println("Invalid format in line: " + line);
                 }
             }
-//            for (User user: userDatabase) {
-//            	user.displayInfo();
-//            }
             scanner.close();
         } catch (FileNotFoundException e) {
-            System.err.println("File not found: " + e.getMessage());
+//            System.err.println("File not found: " + e.getMessage());
         }
     }
     
@@ -72,11 +68,13 @@ public class database {
         return instance;
     }
     
-	public void displayAllUsers() {
-		for (User user : userDatabase) {
-			user.displayInfo();
-		}
-	}
+    public String displayAllUsers() {
+        StringBuilder userInfo = new StringBuilder();
+        for (User user : userDatabase) {
+            userInfo.append(user.displayInfo()).append("\n");
+        }
+        return userInfo.toString();
+    }
     
     // Other database-related methods can be added here
     public User query(String staffID) {

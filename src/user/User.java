@@ -123,8 +123,8 @@ public class User { //Deleted abstract
     	//To change operate function go to role.
     }
 
-    public void displayInfo() {
-        System.out.println("StaffID: " + this.staffID + " " + "staffName: " + staffName + " " + title);
+    public String displayInfo() {
+        return ("StaffID: " + this.staffID + " " + "staffName: " + staffName + " " + title);
     }
 
     public static User Login(String staffID, String pwd) {
