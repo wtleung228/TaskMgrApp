@@ -56,9 +56,9 @@ public class database {
                     System.err.println("Invalid format in line: " + line);
                 }
             }
-            for (User user: userDatabase) {
-            	user.displayInfo();
-            }
+//            for (User user: userDatabase) {
+//            	user.displayInfo();
+//            }
             scanner.close();
         } catch (FileNotFoundException e) {
             System.err.println("File not found: " + e.getMessage());
