@@ -32,6 +32,10 @@ public class Task {
 	public Date getTargetDate() {
 		return this.targetDate;
 	}
+
+	public User getCreator() {
+		return this.creator;
+	}
 	
 	public String getTitle() {
 		return this.title;
@@ -75,6 +79,10 @@ public class Task {
 			taskItems.add(item);
 		}
     }
+	
+	public void addAssignedStaff(User staff) {
+		assignedStaff.add(staff);
+	}
 
     public void removeTodoItem(int index) {
     	index=index-1;

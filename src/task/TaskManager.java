@@ -7,6 +7,9 @@ import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
+import exception.PermissionException;
+import user.User;
+
 public class TaskManager {
     private List<Task> tasks = new ArrayList<>();
 	SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -15,9 +18,32 @@ public class TaskManager {
         tasks.add(task);
     }
 
-    public void removeTask(Task task) {
-        tasks.remove(task);
+    public void removeTask(Scanner scanner,User user) {
+    	try {
+    		System.out.print("Enter the task name to remove: ");
+	        String taskName = scanner.nextLine();
+	        Task selectedTask = this.findTaskByName(taskName);
+	        
+	    	 // Method to find task by name
+
+	        if (selectedTask != null) {
+	        	PermissionException.poCheck(user,selectedTask.getCreator());
+	        	for (User staff : selectedTask.getStaff()) {
+	                staff.getTaskManager().tasks.remove(selectedTask);
+	            }
+	        	
+				tasks.remove(selectedTask);
+				System.out.println("Task removed successfully.");
+	        } else {
+	            System.out.println("Task not found.");
+	        }
+    	}catch(PermissionException e) {
+    		System.out.println(e.getMessage());
+    	}
+    	
     }
+    
+
 
     public List<Task> getTasks() {
         return tasks;
@@ -82,7 +108,8 @@ public class TaskManager {
                     }
                 } else if(input.equals("0")){
                 	return null;
-            	}
+                }
+                
             }
         }
     }
