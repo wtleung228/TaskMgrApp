@@ -15,23 +15,22 @@ public class JuniorRole implements Role {
     public void operate(User user0, Scanner scanner) {
     	//globleuser = user0;
         while (true) {
-            System.out.println("Please select the following options (Junior):");
+        	System.out.println("Please select the following options:");
             System.out.println("1. Add a task");
-            System.out.println("2. List all tasks");
-            System.out.println("3. List all tasks by date");
-            System.out.println("4. Edit Task"); // Edit task functionality
-            System.out.println("5. Assign Task"); // Assign task functionality
-            System.out.println("6. Check user tasks progress"); // Check user tasks progress functionality
+            System.out.println("2. List all my tasks");
+            System.out.println("3. List all my tasks by date");
+            System.out.println("4. Edit my Task");
+            System.out.println("5. Delete my Task");
             System.out.println("0. Exit");
-            int option = -1; // Initialize choice
-            while (option == -1) { // Loop until valid input is received
+            int option = -1;
+            while (option == -1) {
                 try {
                     System.out.print("Enter your choice: ");
                     option = scanner.nextInt();
-                    scanner.nextLine(); // Consume newline
+                    scanner.nextLine();
                 } catch (InputMismatchException e) {
                     System.out.println("Invalid input. Please enter a number.");
-                    scanner.nextLine(); // Clear the invalid input
+                    scanner.nextLine();
                 }
             }
             switch (option) {
@@ -42,23 +41,14 @@ public class JuniorRole implements Role {
                 	user0.getTaskManager().selectTask(scanner);
                     break;
                 case 3:
-                    Date date = user0.getTaskDueDate(scanner);
+                	Date date = user0.getTaskDueDate(scanner); 
                     user0.getTaskManager().listAllTasksByDate(date);
                     break;
                 case 4:
-                	user0.getTaskManager().editTask(scanner); // Call edit task method
+                	user0.getTaskManager().editTask(scanner); 
                     break;
                 case 5:
-					User user = findUser(scanner);
-					Task task = user0.getTaskManager().selectTask(scanner);
-					assignTaskToUser(user, task);
-					break;
-				case 6:
-					User user1 = findUser(scanner);
-					ArrayList<Task> tasksList = checkUserTasksProgress(user1);
-					for (Task task1 : tasksList) {
-						task1.showInfo();
-					}
+                	user0.getTaskManager().removeTask(scanner,user0); 
 					break;
                 case 0:
                     return;

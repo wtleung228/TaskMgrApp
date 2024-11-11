@@ -85,9 +85,7 @@ public class TaskManager {
                 System.out.println("Enter '0' to exit");
                 String input = scanner.nextLine().trim();
                 
-				if (Integer.parseInt(input) > 0 && Integer.parseInt(input) <= 9) {
-					return tasks.get(Integer.parseInt(input) - 1);
-				}
+				
                 
                 if (input.isEmpty()) {
                     System.out.println("Please enter a valid option.");
@@ -100,7 +98,6 @@ public class TaskManager {
                     } else {
                         System.out.println("You are already on the last page.");
                     }
-                } else if (input.equals("<")) {
                     if (currentPage > 1) {
                         currentPage--;
                     } else {
@@ -108,6 +105,9 @@ public class TaskManager {
                     }
                 } else if(input.equals("0")){
                 	return null;
+                }else {
+                	System.out.println("Inavlid option.Please enter again.");
+                	continue;
                 }
                 
             }
@@ -205,17 +205,7 @@ public class TaskManager {
         return null;
     }
     
-	public boolean checkDuplicatedTaskName(String taskName) {
-		if (tasks.isEmpty()) {
-			return false;
-		}
-	    for (Task task : tasks) {
-	        if (task.getTitle().equalsIgnoreCase(taskName)) {
-	            return true;
-	        }
-	    }
-	    return false;
-	}
+	
 	
 	public void listAllTasks() {
 		for (Task task : tasks) {

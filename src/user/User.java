@@ -5,8 +5,9 @@ import java.util.Date;
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
-
+import exception.preDateException;
 import database.database;
+import exception.duplicationException;
 import role.Role;
 import task.Task;
 import task.TaskManager;
@@ -78,17 +79,19 @@ public class User { //Deleted abstract
     public void addTask(Scanner scanner) {
         System.out.println("Please input the following information:");
         String taskName = null;
-        while (taskName == null || taskName.trim().isEmpty() || !assignedTask.checkDuplicatedTaskName(taskName)) {
+        while (taskName == null || taskName.trim().isEmpty()) {
             System.out.print("Task name: ");
             taskName = scanner.nextLine();
             if (taskName.trim().isEmpty()) {
                 System.out.println("Task name cannot be empty. Please enter a valid task name.");
                 continue;
-            } else if (assignedTask.checkDuplicatedTaskName(taskName)) {
-                System.out.println("Task name already exists. Please enter a different task name.");
-                continue;
             }
-            break;
+            try {
+                duplicationException.checkDuplicatedTaskName(taskName, assignedTask.getTasks());
+            } catch (duplicationException e) {
+                System.out.println(e.getMessage());
+                taskName = null; // Reset taskName to prompt user again
+            }
         }
         System.out.print("Task due date: ");
         Date taskDueDate = readDateFromUser(scanner);
@@ -105,9 +108,13 @@ public class User { //Deleted abstract
             String dateString = scanner.next();
             try {
                 date = dateFormat.parse(dateString);
+                preDateException.preDateCheck(date);
             } catch (ParseException e) {
                 System.out.println("Invalid date. Please try again.");
-            }
+			} catch (preDateException e) {
+				System.out.println(e.getMessage());
+				date=null;
+			}
         }
         return date;
     }

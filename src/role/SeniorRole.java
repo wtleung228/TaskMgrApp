@@ -5,8 +5,8 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 
 import database.database;
+import exception.PermissionException;
 import task.Task;
-import task.TaskManager;
 import user.User;
 
 public class SeniorRole implements Role {
@@ -15,15 +15,17 @@ public class SeniorRole implements Role {
     public void operate(User user0, Scanner scanner) {
     	//globleuser = user0;
         while (true) {
-            System.out.println("Please select the following options (Senior):");
+            System.out.println("Please select the following options (Manager):");
             System.out.println("1. Add a task");
             System.out.println("2. List all tasks");
             System.out.println("3. List all tasks by date");
             System.out.println("4. Edit Task"); // Edit task functionality
-            System.out.println("5. Assign Task"); // Assign task functionality
-            System.out.println("6. Check user tasks progress"); // Check user tasks progress functionality
+            System.out.println("5. Delete my Task");
+            System.out.println("6. Assign Task"); // Assign task functionality
+            System.out.println("7. Check user tasks progress"); // Check user tasks progress functionality
             System.out.println("0. Exit");
             int option = -1; // Initialize choice
+            
             while (option == -1) { // Loop until valid input is received
                 try {
                     System.out.print("Enter your choice: ");
@@ -36,24 +38,33 @@ public class SeniorRole implements Role {
             }
             switch (option) {
                 case 1:
-                	user0.addTask(scanner);
+                	user0.addTask(scanner); //this to user0
                     break;
                 case 2:
-                	user0.getTaskManager().selectTask(scanner);
+                	user0.getTaskManager().selectTask(scanner); //assignedTask to user0.getTaskManager()
                     break;
                 case 3:
-                    Date date = user0.getTaskDueDate(scanner);
-                    user0.getTaskManager().listAllTasksByDate(date);
+                    Date date = user0.getTaskDueDate(scanner); //add user0.readDateFromUser(scanner)
+                    user0.getTaskManager().listAllTasksByDate(date); //assignedTask to user0.getTaskManager()
                     break;
                 case 4:
-                	user0.getTaskManager().editTask(scanner); // Call edit task method
+                	user0.getTaskManager().editTask(scanner); // Call edit task method //assignedTask to user0.getTaskManager()
                     break;
                 case 5:
-					User user = findUser(scanner);
-					Task task = user0.getTaskManager().selectTask(scanner);
-					assignTaskToUser(user, task);
+                	user0.getTaskManager().removeTask(scanner,user0); //assignedTask to user0.getTaskManager()
 					break;
-				case 6:
+                case 6:
+                	try {
+                   	 User target = findUser(scanner);
+                        PermissionException.poCheck(user0, target); //this to user0
+                        Task task = user0.getTaskManager().selectTask(scanner); //assignedTask to user0.getTaskManager()
+                        assignTaskToUser(target, task);
+                    } catch (PermissionException e) {
+                        System.out.println(e.getMessage());
+                    }
+                    
+					break;
+				case 7:
 					User user1 = findUser(scanner);
 					ArrayList<Task> tasksList = checkUserTasksProgress(user1);
 					for (Task task1 : tasksList) {
@@ -68,8 +79,9 @@ public class SeniorRole implements Role {
         }
     }	
         
-	    public void assignStaff(User newStaff) {
+	public void assignStaff(User newStaff) { // don't know where the function is called
 			//assignedStaff.add(newStaff);
+	    	
 		}
     	
     	public User findUser(Scanner scanner) {
@@ -92,5 +104,5 @@ public class SeniorRole implements Role {
     			tasksList.add(task);
     	    }
     	    return tasksList;
-    	}
+    	}	
 }
