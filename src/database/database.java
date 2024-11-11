@@ -2,6 +2,11 @@ package database;
 import java.util.ArrayList;
 import java.io.File;
 import java.util.Scanner;
+
+import role.JuniorRole;
+import role.ManagerRole;
+import role.SeniorRole;
+
 import java.io.FileNotFoundException;
 import user.*;
 
@@ -16,8 +21,8 @@ public class database {
     	readFile(fileName);
     	//
     }
-     
-    private void readFile(String fileName) {
+   
+    protected void readFile(String fileName) {
         try {
             File file = new File(fileName);
             Scanner scanner = new Scanner(file);
@@ -31,32 +36,28 @@ public class database {
                     String password = parts[2];
                     String title = parts[3];
                     // Process the staffName, userName, and password as needed
-                    User user;
+                    User user = null; // Initialize to null
                     switch (title) {
                         case "Junior":
-                            user = new Junior(staffName, staffID, password, title);
+                            user = new User(staffName, staffID, password, title, new JuniorRole()); //added new JuniorStrategy()
                             break;
                         case "Senior":
-                            user = new Senior(staffName, staffID, password, title);
+                            user = new User(staffName, staffID, password, title, new SeniorRole()); //added new SeniorStrategy()
                             break;
                         case "Manager":
-                            user = new Manager(staffName, staffID, password, title);
+                        	user = new User(staffName, staffID, password, title, new ManagerRole()); //added new ManagerStrategy()
                             break;
                         default:
-                            System.err.println("Invalid title: " + title);
-                            continue;
+//                            System.err.println("Invalid title: " + title);
                     }
                     userDatabase.add(user);
                 } else {
-                    System.err.println("Invalid format in line: " + line);
+//                    System.err.println("Invalid format in line: " + line);
                 }
-            }
-            for (User user: userDatabase) {
-            	user.displayInfo();
             }
             scanner.close();
         } catch (FileNotFoundException e) {
-            System.err.println("File not found: " + e.getMessage());
+//            System.err.println("File not found: " + e.getMessage());
         }
     }
     
@@ -67,11 +68,13 @@ public class database {
         return instance;
     }
     
-	public void displayAllUsers() {
-		for (User user : userDatabase) {
-			user.displayInfo();
-		}
-	}
+    public String displayAllUsers() {
+        StringBuilder userInfo = new StringBuilder();
+        for (User user : userDatabase) {
+            userInfo.append(user.displayInfo()).append("\n");
+        }
+        return userInfo.toString();
+    }
     
     // Other database-related methods can be added here
     public User query(String staffID) {
