@@ -6,8 +6,7 @@ code looks messy but it works<br/>
 download src and put in project
 
 LATEST UPDATE:
-Very few code change for bug fix
-added duplicationException
-code changed in user.java
-deleted some code in task.java or taskmanager.java (forgot which part deleted)
+Added Admin role and task id
+admin role: assigned tasks to all admin users when tasks created > admin can modify all task
+task id: unique task id for searching (remove & edit function)
 
