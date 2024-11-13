@@ -20,18 +20,14 @@ public class TaskManager {
 
     public void removeTask(Scanner scanner,User user) {
     	try {
-    		System.out.print("Enter the task name to remove: ");
-	        String taskName = scanner.nextLine();
-	        Task selectedTask = this.findTaskByName(taskName);
+    		System.out.print("Enter the task ID to remove: ");
+	        int taskId = scanner.nextInt();
+	        Task selectedTask = this.findTaskById(taskId);
 	        
 	    	 // Method to find task by name
 
 	        if (selectedTask != null) {
 	        	PermissionException.poCheck(user,selectedTask.getCreator());
-	        	for (User staff : selectedTask.getStaff()) {
-	                staff.getTaskManager().tasks.remove(selectedTask);
-	            }
-	        	
 				tasks.remove(selectedTask);
 				System.out.println("Task removed successfully.");
 	        } else {
@@ -43,10 +39,18 @@ public class TaskManager {
     	
     }
     
-
-
-    public List<Task> getTasks() {
-        return tasks;
+    public List<Task> getTasks(User user) {
+    	ArrayList<Task> tasksList = new ArrayList<Task>();
+		for (Task task : tasks) {
+			for (User staff : task.getStaff()) {
+				if (user == staff) {
+					tasksList.add(task);
+				}
+			}
+		}
+    	
+    	return tasksList;
+        //return tasks;
     }
     
 	public int getSize() {
@@ -57,7 +61,7 @@ public class TaskManager {
 		return tasks.get(index);
 	}
 	
-	public Task selectTask(Scanner scanner) {
+	public Task selectTask(Scanner scanner, User searchUser) {
         final int ITEMS_PER_PAGE = 10;
         int currentPage = 1;
         int arrayLength = tasks.size();
@@ -70,12 +74,17 @@ public class TaskManager {
             while (true) {
                 int startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
                 int endIndex = Math.min(currentPage * ITEMS_PER_PAGE, arrayLength);
-
+                
                 for (int i = startIndex; i < endIndex; i++) {
                     System.out.print((i + 1) + ". ");
-                    tasks.get(i).showInfo();
+                    //tasks.get(i).showInfo();
+            		for (User staff : tasks.get(i).getStaff()) {
+            			if (searchUser == staff) {
+            				tasks.get(i).showInfo();
+            				break;
+            			}
+            		}
                 }
-
                 if (endIndex >= arrayLength) {
                     System.out.println("End of items.");
                 }
@@ -84,9 +93,7 @@ public class TaskManager {
                 System.out.println("Enter '<' to view the previous page");
                 System.out.println("Enter '0' to exit");
                 String input = scanner.nextLine().trim();
-                
-				
-                
+        
                 if (input.isEmpty()) {
                     System.out.println("Please enter a valid option.");
                     continue;
@@ -106,21 +113,26 @@ public class TaskManager {
                 } else if(input.equals("0")){
                 	return null;
                 }else {
-                	System.out.println("Inavlid option.Please enter again.");
-                	continue;
+                    System.out.println("Invalid input. Please enter a number.");
+                    continue;
                 }
                 
             }
         }
     }
 	
-	public void editTask(Scanner scanner) {
-        System.out.print("Enter the task name to edit: ");
-        String taskName = scanner.nextLine();
-        Task selectedTask = this.findTaskByName(taskName); // Method to find task by name
+	public void editTask(Scanner scanner, User user) {
+        System.out.print("Enter the task ID to edit: ");
+        int taskId = scanner.nextInt();
+        Task selectedTask = this.findTaskById(taskId); // Method to find task by name
 
         if (selectedTask != null) {
-            manageTodoList(selectedTask, scanner);
+        	for (User staff : selectedTask.getStaff()) {
+				if (staff == user) {
+					manageTodoList(selectedTask, scanner);
+					break;
+				}
+        	}   
         } else {
             System.out.println("Task not found.");
         }
@@ -142,7 +154,7 @@ public class TaskManager {
                     option = scanner.nextInt();
                     scanner.nextLine(); // Consume newline
                 } catch (InputMismatchException e) {
-                    System.out.println("Invalid input. Please enter a number.");
+                    System.out.println("Invalid input. Please enter a task ID.");
                     scanner.nextLine(); // Clear the invalid input
                 }
             }
@@ -205,8 +217,15 @@ public class TaskManager {
         return null;
     }
     
-	
-	
+    public Task findTaskById(int id) {
+        for (Task task : tasks) {
+            if (task.getId() == id) {
+                return task;
+            }
+        }
+        return null;
+    }
+    
 	public void listAllTasks() {
 		for (Task task : tasks) {
 			task.showInfo();
@@ -214,13 +233,17 @@ public class TaskManager {
 		
 	}
 	
-	public void listAllTasksByDate(Date date) {
+	public void listAllTasksByDate(Date date, User searchUser) {
 	    boolean taskFound = false;
+	    
+		
 	    for (Task task : tasks) {
-	        if (task.getTargetDate().equals(date)) {
-	            task.showInfo();
-	            taskFound = true;
-	        }
+	    	for (User staff : task.getStaff()) {
+				if (searchUser == staff && task.getTargetDate().equals(date)) {
+					task.showInfo();
+					taskFound = true;
+				}
+			}
 	    }
 	    if (!taskFound) {
 	        System.out.println("You have no task in " + dateFormat.format(date) + " .");

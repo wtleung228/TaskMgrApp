@@ -10,12 +10,11 @@ import task.Task;
 import user.User;
 
 public class SeniorRole implements Role {
-	//private User globleuser;
     @Override
     public void operate(User user0, Scanner scanner) {
-    	//globleuser = user0;
+    	User userdb = database.getInstance().getUserdb();
         while (true) {
-            System.out.println("Please select the following options (Manager):");
+            System.out.println("Please select the following options (Senior):");
             System.out.println("1. Add a task");
             System.out.println("2. List all tasks");
             System.out.println("3. List all tasks by date");
@@ -37,32 +36,42 @@ public class SeniorRole implements Role {
                 }
             }
             switch (option) {
-                case 1:
-                	user0.addTask(scanner); //this to user0
-                    break;
-                case 2:
-                	user0.getTaskManager().selectTask(scanner); //assignedTask to user0.getTaskManager()
-                    break;
-                case 3:
-                    Date date = user0.getTaskDueDate(scanner); //add user0.readDateFromUser(scanner)
-                    user0.getTaskManager().listAllTasksByDate(date); //assignedTask to user0.getTaskManager()
-                    break;
-                case 4:
-                	user0.getTaskManager().editTask(scanner); // Call edit task method //assignedTask to user0.getTaskManager()
-                    break;
-                case 5:
-                	user0.getTaskManager().removeTask(scanner,user0); //assignedTask to user0.getTaskManager()
+            case 1:
+					userdb.addTask(scanner, user0);
+	                break;
+	            case 2:
+	            	userdb.getTaskManager().selectTask(scanner,user0); 
+	                break;
+	            case 3:
+	                Date date = user0.getTaskDueDate(scanner); //add user0.readDateFromUser(scanner)
+	                userdb.getTaskManager().listAllTasksByDate(date, user0); //assignedTask to user0.getTaskManager()
+	                break;
+	            case 4:
+	            	userdb.getTaskManager().editTask(scanner, user0); // Call edit task method //assignedTask to user0.getTaskManager()
+	                break;
+	            case 5:
+	            	userdb.getTaskManager().removeTask(scanner,user0); //assignedTask to user0.getTaskManager()
 					break;
-                case 6:
-                	try {
-                   	 User target = findUser(scanner);
-                        PermissionException.poCheck(user0, target); //this to user0
-                        Task task = user0.getTaskManager().selectTask(scanner); //assignedTask to user0.getTaskManager()
-                        assignTaskToUser(target, task);
-                    } catch (PermissionException e) {
-                        System.out.println(e.getMessage());
-                    }
-                    
+	            case 6:
+	            	User target = findUser(scanner);
+	            	if (target == null) {
+						System.out.println("User not found.");
+						break;
+					}
+	            	try {
+	                    PermissionException.poCheck(user0, target); //this to user0
+	                    System.out.print("Enter the task ID to assign: ");
+	                    int taskId = scanner.nextInt();
+	                    Task task = userdb.getTaskManager().findTaskById(taskId); //assignedTask to user0.getTaskManager()
+						if (task == null) {
+							System.out.println("Task not found.");
+							break;
+						}
+	                    assignTaskToUser(target, task);
+	                } catch (PermissionException e) {
+	                    System.out.println(e.getMessage());
+	                }
+	                
 					break;
 				case 7:
 					User user1 = findUser(scanner);
@@ -98,11 +107,12 @@ public class SeniorRole implements Role {
     	}
     	
     	public ArrayList<Task> checkUserTasksProgress(User user) {
+    		User userdb = database.getInstance().getUserdb();
     		ArrayList<Task> tasksList = new ArrayList<Task>();
     	    System.out.println("Checking tasks for user: " + user.getName());
-    	    for (Task task : user.getTaskManager().getTasks()) {
+    	    for (Task task : userdb.getTaskManager().getTasks(user)) {
     			tasksList.add(task);
     	    }
     	    return tasksList;
-    	}	
+    	}		
 }

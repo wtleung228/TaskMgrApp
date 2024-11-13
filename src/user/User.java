@@ -1,13 +1,13 @@
 package user;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 import exception.preDateException;
 import database.database;
-import exception.duplicationException;
 import role.Role;
 import task.Task;
 import task.TaskManager;
@@ -34,6 +34,9 @@ public class User { //Deleted abstract
     
     private void setLevel() {
         switch (this.title) {
+			case "Admin":
+				this.level = 4;
+			break;
             case "Manager":
                 this.level = 3;
                 break;
@@ -76,7 +79,7 @@ public class User { //Deleted abstract
         return this.staffID.equals(staffID) && this.pwd.equals(pwd);
     }
 
-    public void addTask(Scanner scanner) {
+    public void addTask(Scanner scanner, User creator) {
         System.out.println("Please input the following information:");
         String taskName = null;
         while (taskName == null || taskName.trim().isEmpty()) {
@@ -86,17 +89,20 @@ public class User { //Deleted abstract
                 System.out.println("Task name cannot be empty. Please enter a valid task name.");
                 continue;
             }
-            try {
-                duplicationException.checkDuplicatedTaskName(taskName, assignedTask.getTasks());
-            } catch (duplicationException e) {
-                System.out.println(e.getMessage());
-                taskName = null; // Reset taskName to prompt user again
-            }
         }
         System.out.print("Task due date: ");
         Date taskDueDate = readDateFromUser(scanner);
-        Task task = new Task(taskName, taskDueDate, this);
+        database db = database.getInstance();
+        Task task = new Task(db.gettaskID(), taskName, taskDueDate, creator);
+        task.addAssignedStaff(creator);
+        db.addTaskID();
         assignedTask.addTask(task);
+        ArrayList<User> userdb = db.getAllUsers();
+        for (User user: userdb) {
+			if (user.getTitle().equals("Admin")) {
+				task.addAssignedStaff(user);
+			}
+        }
     }
 
     protected static Date readDateFromUser(Scanner scanner) {
@@ -121,7 +127,8 @@ public class User { //Deleted abstract
     
     private void dashBoard() {
     	System.out.println("Welcome to the dashboard:");
-    	assignedTask.listAllTasks();
+    	
+    	//assignedTask.listAllTasks();
     }
 
     public void operate(Scanner scanner) { //Added User user

@@ -3,29 +3,38 @@ package task;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
+
 import user.User;
 
 public class Task {
+	 private int id;
 	 private String title;
-	 private ArrayList<User> assignedStaff;
+	 private Set<User> assignedStaff;
 	 private Date targetDate;
 	 private ArrayList<TaskItem> taskItems;
 	 private User creator;
 	 SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");	//format date
 	 
-	 public Task(String title, Date targetDate, User creator) {
+	 public Task(int id, String title, Date targetDate, User creator) {
+		 this.id = id;
 	     this.title = title;
 	     this.targetDate = targetDate;
-	     this.assignedStaff = new ArrayList<>();
+	     this.assignedStaff = new HashSet<>();
 	     this.taskItems = new ArrayList<>();
 	     this.creator = creator;
 	 }
 	
+	 public int getId() {
+		return this.id;
+	 }
+	 
 	public void setDate(Date date) {
 		this.targetDate = date;
 	}
 	
-	public ArrayList<User> getStaff() {
+	public Set<User> getStaff() {
 		return this.assignedStaff;
 	}
 	
@@ -44,11 +53,11 @@ public class Task {
 	public void showInfo() {
         int progress = calculateProgress();
         if (progress == -1) {
-            System.out.println(dateFormat.format(targetDate) +" "+ title + " " + "created by" + " " + this.creator.getName() + " [Progress: Empty]");
+            System.out.println(id + " " + dateFormat.format(targetDate) +" "+ title + " " + "created by" + " " + this.creator.getName() + " [Progress: Empty]");
 		} else if(progress == 100){
-			System.out.println(dateFormat.format(targetDate) + " " + title + " " + "created by" + " " + this.creator.getName() + " [Progress: Done]");
+			System.out.println(id + " " + dateFormat.format(targetDate) + " " + title + " " + "created by" + " " + this.creator.getName() + " [Progress: Done]");
         } else {
-			System.out.println(dateFormat.format(targetDate) + " " + title + " "+ "created by" + " " + this.creator.getName() + " [Progress: " + progress + "%]");
+			System.out.println(id + " " + dateFormat.format(targetDate) + " " + title + " "+ "created by" + " " + this.creator.getName() + " [Progress: " + progress + "%]");
 		}
       
     }
