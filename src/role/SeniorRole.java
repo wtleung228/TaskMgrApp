@@ -10,12 +10,10 @@ import task.Task;
 import user.User;
 
 public class SeniorRole implements Role {
-	//private User globleuser;
     @Override
     public void operate(User user0, Scanner scanner) {
-    	//globleuser = user0;
         while (true) {
-            System.out.println("Please select the following options (Manager):");
+            System.out.println("Please select the following options (Senior):");
             System.out.println("1. Add a task");
             System.out.println("2. List all tasks");
             System.out.println("3. List all tasks by date");
@@ -41,7 +39,7 @@ public class SeniorRole implements Role {
                 	user0.addTask(scanner); //this to user0
                     break;
                 case 2:
-                	user0.getTaskManager().selectTask(scanner); //assignedTask to user0.getTaskManager()
+                	user0.getTaskManager().listAllTask(scanner); //assignedTask to user0.getTaskManager()
                     break;
                 case 3:
                     Date date = user0.getTaskDueDate(scanner); //add user0.readDateFromUser(scanner)
@@ -54,8 +52,12 @@ public class SeniorRole implements Role {
                 	user0.getTaskManager().removeTask(scanner,user0); //assignedTask to user0.getTaskManager()
 					break;
                 case 6:
+                	User target = findUser(scanner);
+					if (target == null) {
+						System.out.println("User not found.");
+						break;
+					}
                 	try {
-                   	 User target = findUser(scanner);
                         PermissionException.poCheck(user0, target); //this to user0
                         Task task = user0.getTaskManager().selectTask(scanner); //assignedTask to user0.getTaskManager()
                         assignTaskToUser(target, task);
@@ -89,7 +91,9 @@ public class SeniorRole implements Role {
     		database db = database.getInstance();
     		db.displayAllUsers();
     		String userID = scanner.nextLine();
-    		return db.query(userID);
+			return db.query(userID);
+			
+    		
     	}
     	
     	public void assignTaskToUser(User user, Task task) {

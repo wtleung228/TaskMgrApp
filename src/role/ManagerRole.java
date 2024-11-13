@@ -11,10 +11,8 @@ import task.TaskManager;
 import user.User;
 
 public class ManagerRole implements Role {
-	//private User globleuser;
     @Override
     public void operate(User user0, Scanner scanner) {
-    	//globleuser = user0;
         while (true) {
             System.out.println("Please select the following options (Manager):");
             System.out.println("1. Add a task");
@@ -42,7 +40,7 @@ public class ManagerRole implements Role {
                 	user0.addTask(scanner); //this to user0
                     break;
                 case 2:
-                	user0.getTaskManager().selectTask(scanner); //assignedTask to user0.getTaskManager()
+                	user0.getTaskManager().listAllTask(scanner); //assignedTask to user0.getTaskManager()
                     break;
                 case 3:
                     Date date = user0.getTaskDueDate(scanner); //add user0.readDateFromUser(scanner)
@@ -80,11 +78,6 @@ public class ManagerRole implements Role {
         }
     }	
         
-	public void assignStaff(User newStaff) { // don't know where the function is called
-			//assignedStaff.add(newStaff);
-	    	
-		}
-    	
     	public User findUser(Scanner scanner) {
     		System.out.println("Please choose a Staff (choose by ID): ");
     		database db = database.getInstance();
@@ -94,8 +87,13 @@ public class ManagerRole implements Role {
     	}
     	
     	public void assignTaskToUser(User user, Task task) {
-    	    user.getTaskManager().addTask(task);
-    	    System.out.println("Task " + task.getTitle() + " assigned to " + user.getName() + ".");
+    		if(task==null) {
+    			
+    		}else {
+    			user.getTaskManager().addTask(task);
+        	    System.out.println("Task " + task.getTitle() + " assigned to " + user.getName() + ".");
+    		}
+    	    
     	}
     	
     	public ArrayList<Task> checkUserTasksProgress(User user) {

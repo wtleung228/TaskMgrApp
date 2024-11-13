@@ -10,12 +10,10 @@ import task.TaskManager;
 import user.User;
 
 public class JuniorRole implements Role {
-	//private User globleuser;
     @Override
     public void operate(User user0, Scanner scanner) {
-    	//globleuser = user0;
         while (true) {
-        	System.out.println("Please select the following options:");
+        	System.out.println("Please select the following options: (Junior)");
             System.out.println("1. Add a task");
             System.out.println("2. List all my tasks");
             System.out.println("3. List all my tasks by date");
@@ -38,7 +36,7 @@ public class JuniorRole implements Role {
                 	user0.addTask(scanner);
                     break;
                 case 2:
-                	user0.getTaskManager().selectTask(scanner);
+                	user0.getTaskManager().listAllTask(scanner);
                     break;
                 case 3:
                 	Date date = user0.getTaskDueDate(scanner); 
@@ -58,10 +56,6 @@ public class JuniorRole implements Role {
         }
     }	
         
-	    public void assignStaff(User newStaff) {
-			//assignedStaff.add(newStaff);
-		}
-    	
     	public User findUser(Scanner scanner) {
     		System.out.println("Please choose a Staff (choose by ID): ");
     		database db = database.getInstance();

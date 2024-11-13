@@ -23,7 +23,7 @@ public class TaskMgrApp {
 	}
 	
 	public void App() {
-		while (true) {			
+		while (true) {
 			Scanner scanner = new Scanner(System.in);
 			User user = Login(scanner);
 			user.operate(scanner);

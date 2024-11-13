@@ -3,6 +3,7 @@ import java.util.ArrayList;
 import java.io.File;
 import java.util.Scanner;
 
+import role.AdminRole;
 import role.JuniorRole;
 import role.ManagerRole;
 import role.SeniorRole;
@@ -13,6 +14,7 @@ import user.*;
 public class database {
 	ArrayList<User> userDatabase = new ArrayList<User>();
     private static database instance;
+    private int taskID = 1000;
     
     // Private constructor to prevent instantiation from outside
     private database() {
@@ -39,14 +41,17 @@ public class database {
                     User user = null; // Initialize to null
                     switch (title) {
                         case "Junior":
-                            user = new User(staffName, staffID, password, title, new JuniorRole()); //added new JuniorStrategy()
+                            user = new User(staffName, staffID, password, title, new JuniorRole()); //added new JuniorRole()
                             break;
                         case "Senior":
-                            user = new User(staffName, staffID, password, title, new SeniorRole()); //added new SeniorStrategy()
+                            user = new User(staffName, staffID, password, title, new SeniorRole()); //added new SeniorRole()
                             break;
                         case "Manager":
-                        	user = new User(staffName, staffID, password, title, new ManagerRole()); //added new ManagerStrategy()
+                        	user = new User(staffName, staffID, password, title, new ManagerRole()); //added new ManagerRole()
                             break;
+                        case "Admin":
+                        	user = new User(staffName, staffID, password, title, new AdminRole()); //added new AdminRole()
+                            break;    
                         default:
 //                            System.err.println("Invalid title: " + title);
                     }
@@ -87,4 +92,16 @@ public class database {
     	
         return null;
     }
+    
+    public ArrayList<User> getAllUsers() {
+    	return userDatabase;
+    }
+    
+    public int gettaskID() {
+    	return taskID;
+    }
+    
+	public void addTaskID() {
+		taskID++;
+	}
 }

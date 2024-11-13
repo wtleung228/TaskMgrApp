@@ -20,9 +20,9 @@ public class TaskManager {
 
     public void removeTask(Scanner scanner,User user) {
     	try {
-    		System.out.print("Enter the task name to remove: ");
-	        String taskName = scanner.nextLine();
-	        Task selectedTask = this.findTaskByName(taskName);
+    		System.out.print("Enter the task ID to remove: ");
+	        int taskId = scanner.nextInt();
+	        Task selectedTask = this.findTaskById(taskId);
 	        
 	    	 // Method to find task by name
 
@@ -84,9 +84,7 @@ public class TaskManager {
                 System.out.println("Enter '<' to view the previous page");
                 System.out.println("Enter '0' to exit");
                 String input = scanner.nextLine().trim();
-                
-				
-                
+        
                 if (input.isEmpty()) {
                     System.out.println("Please enter a valid option.");
                     continue;
@@ -106,18 +104,82 @@ public class TaskManager {
                 } else if(input.equals("0")){
                 	return null;
                 }else {
-                	System.out.println("Inavlid option.Please enter again.");
-                	continue;
+                	try {
+                        int taskIndex = Integer.parseInt(input) - 1;
+                        if (taskIndex >= startIndex && taskIndex < endIndex) {
+                            return tasks.get(taskIndex);
+                        } else {
+                            System.out.println("Invalid task number. Please enter a number between " + (startIndex + 1) + " and " + endIndex + ".");
+                        }
+                    } catch (NumberFormatException e) {
+                        System.out.println("Invalid input. Please enter a number.");
+                    }
                 }
                 
             }
         }
     }
 	
+	public Task listAllTask(Scanner scanner) {
+        final int ITEMS_PER_PAGE = 10;
+        int currentPage = 1;
+        int arrayLength = tasks.size();
+        int maxPage = (int) Math.ceil((double) arrayLength / ITEMS_PER_PAGE);
+ 
+        if (tasks.isEmpty()) {
+            System.out.println("You have no task.");
+            return null;
+        } else {
+            while (true) {
+                int startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+                int endIndex = Math.min(currentPage * ITEMS_PER_PAGE, arrayLength);
+
+                for (int i = startIndex; i < endIndex; i++) {
+                    System.out.print((i + 1) + ". ");
+                    tasks.get(i).showInfo();
+                }
+
+                if (endIndex >= arrayLength) {
+                    System.out.println("End of items.");
+                }
+
+                System.out.println("Enter '>' to view the next page");
+                System.out.println("Enter '<' to view the previous page");
+                System.out.println("Enter '0' to exit");
+                String input = scanner.nextLine().trim();
+        
+                if (input.isEmpty()) {
+                    System.out.println("Please enter a valid option.");
+                    continue;
+                }
+
+                if (input.equals(">")) {
+                    if (currentPage < maxPage) {
+                        currentPage++;
+                    } else {
+                        System.out.println("You are already on the last page.");
+                    }
+                    if (currentPage > 1) {
+                        currentPage--;
+                    } else {
+                        System.out.println("You are already on the first page.");
+                    }
+                } else if(input.equals("0")){
+                	return null;
+                }else {
+                    System.out.println("Invalid input. Please enter again.");
+                    continue;
+                }
+                
+                
+            }
+        }
+    }
+	
 	public void editTask(Scanner scanner) {
-        System.out.print("Enter the task name to edit: ");
-        String taskName = scanner.nextLine();
-        Task selectedTask = this.findTaskByName(taskName); // Method to find task by name
+        System.out.print("Enter the task ID to edit: ");
+        int taskId = scanner.nextInt();
+        Task selectedTask = this.findTaskById(taskId); // Method to find task by name
 
         if (selectedTask != null) {
             manageTodoList(selectedTask, scanner);
@@ -205,14 +267,21 @@ public class TaskManager {
         return null;
     }
     
-	
-	
-	public void listAllTasks() {
+    public Task findTaskById(int id) {
+        for (Task task : tasks) {
+            if (task.getId() == id) {
+                return task;
+            }
+        }
+        return null;
+    }
+    
+    public void listAllTasks() {
 		for (Task task : tasks) {
 			task.showInfo();
 		}
-		
 	}
+	
 	
 	public void listAllTasksByDate(Date date) {
 	    boolean taskFound = false;
