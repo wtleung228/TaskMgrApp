@@ -64,6 +64,8 @@ public class ManagerRole implements Role {
 	                    System.out.print("Enter the task ID to assign: ");
 	                    int taskId = scanner.nextInt();
 	                    Task task = userdb.getTaskManager().findTaskById(taskId); //assignedTask to user0.getTaskManager()
+	                    User taskCreator = userdb.getTaskManager().findTaskCreatorById(taskId);
+	                    PermissionException.poCheck(user0, taskCreator);
 						if (task == null) {
 							System.out.println("Task not found.");
 							break;
@@ -72,7 +74,6 @@ public class ManagerRole implements Role {
 	                } catch (PermissionException e) {
 	                    System.out.println(e.getMessage());
 	                }
-	                
 					break;
 				case 7:
 					User user1 = findUser(scanner);

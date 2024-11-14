@@ -13,7 +13,7 @@ public class PermissionException extends Exception {
     		return;
     	}
     	else if (user.getLevel() <= target.getLevel()) {
-            throw new PermissionException("You do not have permission to assign tasks to this user.");
+            throw new PermissionException("You don't have permission.");
         }
     }
     

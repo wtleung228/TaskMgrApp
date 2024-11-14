@@ -62,64 +62,72 @@ public class TaskManager {
 	}
 	
 	public Task selectTask(Scanner scanner, User searchUser) {
-        final int ITEMS_PER_PAGE = 10;
-        int currentPage = 1;
-        int arrayLength = tasks.size();
-        int maxPage = (int) Math.ceil((double) arrayLength / ITEMS_PER_PAGE);
- 
-        if (tasks.isEmpty()) {
-            System.out.println("You have no task.");
-            return null;
-        } else {
-            while (true) {
-                int startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
-                int endIndex = Math.min(currentPage * ITEMS_PER_PAGE, arrayLength);
-                
-                for (int i = startIndex; i < endIndex; i++) {
-                    System.out.print((i + 1) + ". ");
-                    //tasks.get(i).showInfo();
-            		for (User staff : tasks.get(i).getStaff()) {
-            			if (searchUser == staff) {
-            				tasks.get(i).showInfo();
-            				break;
-            			}
-            		}
-                }
-                if (endIndex >= arrayLength) {
-                    System.out.println("End of items.");
-                }
+	    final int ITEMS_PER_PAGE = 10;
+	    int currentPage = 1;
+	    List<Task> userTasks = new ArrayList<>();
+	    // Filter tasks assigned to the searchUser
+	    for (Task task : tasks) {
+	        for (User staff : task.getStaff()) {
+	            if (searchUser == staff) {
+	                userTasks.add(task);
+	                break;
+	            }
+	        }
+	    }
 
-                System.out.println("Enter '>' to view the next page");
-                System.out.println("Enter '<' to view the previous page");
-                System.out.println("Enter '0' to exit");
-                String input = scanner.nextLine().trim();
-        
-                if (input.isEmpty()) {
-                    System.out.println("Please enter a valid option.");
-                    continue;
-                }
+	    int arrayLength = userTasks.size();
+	    int maxPage = (int) Math.ceil((double) arrayLength / ITEMS_PER_PAGE);
 
-                if (input.equals(">")) {
-                    if (currentPage < maxPage) {
-                        currentPage++;
-                    } else {
-                        System.out.println("You are already on the last page.");
-                    }
-                    if (currentPage > 1) {
-                        currentPage--;
-                    } else {
-                        System.out.println("You are already on the first page.");
-                    }
-                } else if(input.equals("0")){
-                	return null;
-                }else {
-                    System.out.println("Invalid input. Please enter a number.");
-                    continue;
-                }
-                
-            }
-        }
-    }
+	    if (arrayLength == 0) {
+	        System.out.println("You have no task.");
+	        return null;
+	    } else {
+	        while (true) {
+	            int startIndex = (currentPage - 1) * ITEMS_PER_PAGE;
+	            int endIndex = Math.min(currentPage * ITEMS_PER_PAGE, arrayLength);
+
+	            for (int i = startIndex; i < endIndex; i++) {
+	                System.out.print((i + 1) + ". ");
+	                userTasks.get(i).showInfo();
+	            }
+
+	            if (endIndex >= arrayLength) {
+	                System.out.println("End of items.");
+	            }
+
+	            System.out.println("Enter '>' to view the next page");
+	            System.out.println("Enter '<' to view the previous page");
+	            System.out.println("Enter '0' to exit");
+	            String input = scanner.nextLine().trim();
+
+	            if (input.isEmpty()) {
+	                System.out.println("Please enter a valid option.");
+	                continue;
+	            }
+
+	            if (input.equals(">")) {
+	                if (currentPage < maxPage) {
+	                    currentPage++;
+	                } else {
+	                    System.out.println("You are already on the last page.");
+	                }
+	            } else if (input.equals("<")) {
+	                if (currentPage > 1) {
+	                    currentPage--;
+	                } else {
+	                    System.out.println("You are already on the first page.");
+	                }
+	            } else if (input.equals("0")) {
+	                return null;
+	            } else {  
+	                System.out.println("Invalid option.");
+	                continue;
+	            }
+	                
+	            
+	        }
+	    }
+	}
 	
 	public void editTask(Scanner scanner, User user) {
         System.out.print("Enter the task ID to edit: ");
@@ -226,12 +234,23 @@ public class TaskManager {
         return null;
     }
     
-	public void listAllTasks() {
-		for (Task task : tasks) {
+    public User findTaskCreatorById(int taskId) {
+        for (Task task : tasks) {
+            if (task.getId() == taskId) {
+                return task.getCreator();
+            }
+        }
+        return null;
+    }
+
+    public void listAllTasks(User searchUser) {
+    	for (Task task : tasks) {
 			task.showInfo();
 		}
-		
 	}
+
+	    
+
 	
 	public void listAllTasksByDate(Date date, User searchUser) {
 	    boolean taskFound = false;
