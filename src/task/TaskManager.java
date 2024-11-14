@@ -61,7 +61,7 @@ public class TaskManager {
 		return tasks.get(index);
 	}
 	
-	public Task selectTask(Scanner scanner, User searchUser) {
+	public Task listAllTask(Scanner scanner, User searchUser) {
 	    final int ITEMS_PER_PAGE = 10;
 	    int currentPage = 1;
 	    List<Task> userTasks = new ArrayList<>();
@@ -138,6 +138,9 @@ public class TaskManager {
         	for (User staff : selectedTask.getStaff()) {
 				if (staff == user) {
 					manageTodoList(selectedTask, scanner);
+					break;
+				}else {
+					System.out.println("Task not found.");
 					break;
 				}
         	}   
@@ -242,14 +245,6 @@ public class TaskManager {
         }
         return null;
     }
-
-    public void listAllTasks(User searchUser) {
-    	for (Task task : tasks) {
-			task.showInfo();
-		}
-	}
-
-	    
 
 	
 	public void listAllTasksByDate(Date date, User searchUser) {

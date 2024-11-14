@@ -41,7 +41,7 @@ public class ManagerRole implements Role {
 					userdb.addTask(scanner, user0);
                     break;
                 case 2:
-                	userdb.getTaskManager().selectTask(scanner,user0); 
+                	userdb.getTaskManager().listAllTask(scanner,user0); 
                     break;
                 case 3:
                     Date date = user0.getTaskDueDate(scanner);

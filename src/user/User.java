@@ -126,15 +126,10 @@ public class User { //Deleted abstract
     }
     
 
-	private void dashBoard(User user) {
-	    //System.out.println("Welcome to the dashboard:");
-	    
-	    //assignedTask.listAllTasks();
-	}
-
+	
 
     public void operate(Scanner scanner) { //Added User user
-    	dashBoard(this);
+    	
     	role.operate(this, scanner); //Newly added
     	//To change operate function go to role.
     }
