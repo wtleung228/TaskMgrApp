@@ -13,7 +13,7 @@ import user.*;
 
 public class database {
 	ArrayList<User> userDatabase = new ArrayList<User>();
-    private static database instance;
+    private volatile static database instance;
     private int taskID = 1000;
     
     // Private constructor to prevent instantiation from outside
@@ -68,7 +68,11 @@ public class database {
     
     public static database getInstance() {
         if (instance == null) {
-            instance = new database();
+        	 synchronized (database.class) {
+        		 if (instance == null) {
+                        instance = new database();
+        		 }
+        	 }
         }
         return instance;
     }
