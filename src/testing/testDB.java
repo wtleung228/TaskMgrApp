@@ -33,5 +33,21 @@ public class testDB {
 		User user = db.query("John1234");
 		assertEquals(null, user);
 	}
+    
+    @Test
+    public void testUserLoginTrue() {
+        User user = User.Login("John123", "123");
+        assertEquals("John", user.getName());
+    }
+    
+    @Test
+    public void testUserLoginFalse() {
+        User user = User.Login("John123", "1234");
+        assertEquals(null, user);
+    }
+    
+    
+    
+
    
 }
