@@ -9,6 +9,9 @@ public class PermissionException extends Exception {
     }
 
     public static void poCheck(User user, User target) throws PermissionException {
+		if (target == null) {
+			return;
+		} else
     	if(user.equals(target)) {
     		return;
     	}

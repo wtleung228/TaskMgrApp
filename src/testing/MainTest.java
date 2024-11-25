@@ -23,7 +23,7 @@ public class MainTest {
     @Test
     public void testMain() {
         // Prepare input and output streams
-        String input = "John123\n123\nN\n";
+        String input = "John123\n123\n0\nN\n";
         System.setIn(new ByteArrayInputStream(input.getBytes()));
         TaskMgrApp.main(new String[]{});
         String output = outContent.toString();
@@ -41,12 +41,11 @@ public class MainTest {
 
     @Test
     public void loginFail() {
-    	String input = "John123\n111\n";
+    	String input = "John123\n111\nexit\nN\n";
         System.setIn(new ByteArrayInputStream(input.getBytes()));
         Scanner scanner = new Scanner(System.in);
         User user = TaskMgrApp.Login(scanner);
-        assertNotNull(user); 
-        assertEquals("username or password is wrong. ", outContent.toString());
+        assertTrue(outContent.toString().contains("username or password is wrong."));
         
     }
 }

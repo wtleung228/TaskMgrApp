@@ -57,25 +57,5 @@ public class JuniorRole implements Role {
         }
     }	
         
-    	public User findUser(Scanner scanner) {
-    		System.out.println("Please choose a Staff (choose by ID): ");
-    		database db = database.getInstance();
-    		db.displayAllUsers();
-    		String userID = scanner.nextLine();
-    		return db.query(userID);
-    	}
-    	
-    	public void assignTaskToUser(User user, Task task) {
-    	    user.getTaskManager().addTask(task);
-    	    System.out.println("Task " + task.getTitle() + " assigned to " + user.getName() + ".");
-    	}
-    	
-    	public ArrayList<Task> checkUserTasksProgress(User user) {
-    		ArrayList<Task> tasksList = new ArrayList<Task>();
-    	    System.out.println("Checking tasks for user: " + user.getName());
-    	    for (Task task : user.getTaskManager().getTasks(user)) {
-    			tasksList.add(task);
-    	    }
-    	    return tasksList;
-    	}	
+	
 }

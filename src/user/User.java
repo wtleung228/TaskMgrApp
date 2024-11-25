@@ -74,6 +74,10 @@ public class User { //Deleted abstract
     public TaskManager getTaskManager() {
         return assignedTask;
     }
+    
+	public void setTaskManager(TaskManager taskManager) {
+		this.assignedTask = taskManager;
+	}
 
     public boolean authen(String staffID, String pwd) {
         return this.staffID.equals(staffID) && this.pwd.equals(pwd);
@@ -103,6 +107,7 @@ public class User { //Deleted abstract
 				task.addAssignedStaff(user);
 			}
         }
+        System.out.println("Task added successfully.");
     }
 
     protected static Date readDateFromUser(Scanner scanner) {

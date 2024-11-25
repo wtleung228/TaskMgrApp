@@ -9,9 +9,15 @@ public class TaskMgrApp {
 		while (true) {
 			System.out.print("Please input username:");
 			String username = scanner.next();
+			if (username.equals("exit")) {
+				return null;
+			}
 			System.out.println("");
 			System.out.print("Please input password:");
 			String pwd = scanner.next();
+			if (pwd.equals("exit")) {
+				return null;
+			}
 			User user = User.Login(username, pwd);
 			if (user != null) {
 				user.displayInfo();
@@ -26,10 +32,16 @@ public class TaskMgrApp {
 		while (true) {
 			Scanner scanner = new Scanner(System.in);
 			User user = Login(scanner);
-			user.operate(scanner);
-			System.out.println("Do you want to continue? (Y/N)");
-			String choice = scanner.next();
-			if (choice.equals("N") || choice.equals("n")) {
+			if (user != null) {
+				user.operate(scanner);
+				System.out.println("Do you want to continue? (Y/N)");	
+				String choice = scanner.next();
+				if (choice.equals("N") || choice.equals("n")) {
+					break;
+				} else {
+					continue;
+				}
+			} else {
 				break;
 			}
 		}
