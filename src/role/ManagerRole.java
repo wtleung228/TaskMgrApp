@@ -7,7 +7,6 @@ import java.util.Scanner;
 import database.database;
 import exception.PermissionException;
 import task.Task;
-import task.TaskManager;
 import user.User;
 
 public class ManagerRole implements Role {
@@ -64,12 +63,11 @@ public class ManagerRole implements Role {
 	                    System.out.print("Enter the task ID to assign: ");
 	                    int taskId = scanner.nextInt();
 	                    Task task = userdb.getTaskManager().findTaskById(taskId); //assignedTask to user0.getTaskManager()
+	                    if (task == null) {
+							System.out.println("Task not found.");
+							break;}
 	                    User taskCreator = userdb.getTaskManager().findTaskCreatorById(taskId);
 	                    PermissionException.poCheck(user0, taskCreator);
-						if (task == null) {
-							System.out.println("Task not found.");
-							break;
-						}
 	                    assignTaskToUser(target, task);
 	                } catch (PermissionException e) {
 	                    System.out.println(e.getMessage());
