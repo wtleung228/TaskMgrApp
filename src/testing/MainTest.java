@@ -46,6 +46,5 @@ public class MainTest {
         Scanner scanner = new Scanner(System.in);
         User user = TaskMgrApp.Login(scanner);
         assertTrue(outContent.toString().contains("username or password is wrong."));
-        
     }
 }

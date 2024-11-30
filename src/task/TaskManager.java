@@ -135,15 +135,17 @@ public class TaskManager {
         Task selectedTask = this.findTaskById(taskId); // Method to find task by name
 
         if (selectedTask != null) {
+        	boolean staffFound = false;
         	for (User staff : selectedTask.getStaff()) {
 				if (staff == user) {
+					staffFound = true;
 					manageTodoList(selectedTask, scanner);
 					break;
-				}else {
-					System.out.println("Task not found.");
-					break;
 				}
-        	}   
+        	}
+        	if (!staffFound) {
+        		System.out.println("Task not found.");
+        	}
         } else {
             System.out.println("Task not found.");
         }
