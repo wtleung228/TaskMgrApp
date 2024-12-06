@@ -129,11 +129,10 @@ public class TaskManager {
 	    }
 	}
 	
-	public void editTask(Scanner scanner, User user) {
+	public void editTask(Scanner scanner, User user) throws InputMismatchException {
         System.out.print("Enter the task ID to edit: ");
         int taskId = scanner.nextInt();
         Task selectedTask = this.findTaskById(taskId); // Method to find task by name
-
         if (selectedTask != null) {
         	boolean staffFound = false;
         	for (User staff : selectedTask.getStaff()) {

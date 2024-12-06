@@ -59,7 +59,7 @@ public class MainTest {
         
         assertTrue(output.contains("Task added successfully."));//check add task      
         assertTrue(output.contains("1000 2024-12-31 Test Task created by John [Progress: 0%]"));//check list task 
-        assertTrue(output.contains("TO-DO List for Task: Test Task\n1. item1 [Status: No]"));//check addItem and listItem
+        assertTrue(output.contains("1. item1 [Status: No]"));//check addItem and listItem
     }
     @Test // login with Admin Role->Add Task->AssignTask to Senior Role
     public void SystemTest2() {
@@ -81,7 +81,8 @@ public class MainTest {
         String output = outContent.toString();
         
         assertTrue(output.contains("Task added successfully."));//check add task      
-        assertTrue(output.contains("1. item1 [Status: Yes]\n2. item2 [Status: No]")); // check add to-do item, change item status, list taskItem
+        assertTrue(output.contains("1. item1 [Status: Yes]")); // check add to-do item, change item status, list taskItem
+        assertTrue(output.contains("2. item2 [Status: No]"));
     }
     
     

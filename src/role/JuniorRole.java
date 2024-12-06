@@ -44,8 +44,13 @@ public class JuniorRole implements Role {
 	                userdb.getTaskManager().listAllTasksByDate(date, user0); //assignedTask to user0.getTaskManager()
 	                break;
 	            case 4:
-	            	userdb.getTaskManager().editTask(scanner, user0); // Call edit task method //assignedTask to user0.getTaskManager()
-	                break;
+	            	try {
+		            	userdb.getTaskManager().editTask(scanner, user0); // Call edit task method //assignedTask to user0.getTaskManager()
+	            	} catch (InputMismatchException e) {
+                        System.out.println("Invalid input. Please enter a task ID.");
+                        scanner.nextLine(); // Clear the invalid input
+	            	}
+	            	break;	
 	            case 5:
 	            	userdb.getTaskManager().removeTask(scanner,user0); //assignedTask to user0.getTaskManager()
 					break;

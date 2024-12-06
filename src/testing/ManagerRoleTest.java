@@ -237,4 +237,18 @@ public class ManagerRoleTest {
         String expectedOutput = "Invalid option";
         assertTrue(outContent.toString().contains(expectedOutput));
     }
+    
+    @Test
+    public void testInvalidTaskIDType() {
+        ByteArrayOutputStream outContent = new ByteArrayOutputStream();
+        PrintStream originalOut = System.out;
+        System.setOut(new PrintStream(outContent));
+        
+        Scanner scanner = new Scanner("4\n0\n0\n");
+        managerRole.operate(managerUser, scanner);
+        
+        System.setOut(originalOut); // Reset the standard output before assertion
+        String expectedOutput = "Task not found.";
+        assertTrue(outContent.toString().contains(expectedOutput));
+    }
 }
