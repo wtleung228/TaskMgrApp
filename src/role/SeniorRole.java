@@ -110,6 +110,7 @@ public class SeniorRole implements Role {
     	
     	public void assignTaskToUser(User user, Task task) {
     	    user.getTaskManager().addTask(task);
+    	    task.addAssignedStaff(user);
     	    System.out.println("Task " + task.getTitle() + " assigned to " + user.getName() + ".");
     	}
     	
